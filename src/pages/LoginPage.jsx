@@ -77,7 +77,7 @@ const LoginPage = () => {
   return (
     <div className="max-w-md mx-auto">
       <div className="bg-white shadow-md rounded-lg p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">{t('auth.login')}</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">관리자 로그인</h1>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -142,19 +142,10 @@ const LoginPage = () => {
               className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isLoading}
             >
-              {isLoading ? t('common.loading') : t('auth.login')}
+              {isLoading ? t('common.loading') : '관리자 로그인'}
             </button>
           </div>
         </form>
-        
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            {t('auth.noAccount', '계정이 없으신가요?')}{' '}
-            <Link to="/register" className="text-indigo-600 hover:text-indigo-500">
-              {t('auth.register')}
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );

@@ -17,7 +17,8 @@ const resources = {
         next: '다음',
         search: '검색',
         noResults: '결과가 없습니다.',
-        required: '필수 항목입니다.'
+        required: '필수 항목입니다.',
+        all: '전체'
       },
       auth: {
         login: '로그인',
@@ -49,13 +50,30 @@ const resources = {
         sort: '정렬',
         translatedBy: '번역자',
         reviewedBy: '검수자',
+        translator: '번역자',
+        id: 'ID',
+        category: '카테고리',
+        originalText: '원문',
+        translatedText: '번역문',
+        notTranslatedYet: '아직 번역되지 않음',
+        noTranslationsFound: '번역을 찾을 수 없습니다',
+        tryDifferentFilters: '다른 필터를 시도해보세요',
         statuses: {
           pending: '대기 중',
           inProgress: '진행 중',
           reviewRequired: '검수 필요',
           completed: '완료',
           approved: '승인됨'
-        }
+        },
+        backToProjects: '프로젝트 목록으로 돌아가기',
+        progressStatus: '진행 상황',
+        completed: '완료됨',
+        filters: '필터',
+        mainCategory: '메인 카테고리',
+        subCategory: '하위 카테고리',
+        searchPlaceholder: '검색...',
+        projects: '프로젝트',
+        categories: '카테고리'
       },
       navigation: {
         home: '홈',
@@ -63,7 +81,24 @@ const resources = {
         dashboard: '대시보드',
         profile: '프로필',
         settings: '설정',
-        admin: '관리자'
+        admin: '관리자',
+        title: '페이지',
+        projects: '프로젝트',
+        searchPlaceholder: '검색...',
+        projects: 'Projects',
+        categories: 'Categories'
+      },
+      pagination: {
+        showing: '전체',
+        to: '-',
+        of: '개 중',
+        results: '번째 항목',
+        previous: '이전',
+        next: '다음',
+        settings: 'Settings',
+        admin: 'Admin',
+        title: 'Pages',
+        projects: 'Projects'
       }
     }
   },
@@ -81,7 +116,8 @@ const resources = {
         next: 'Next',
         search: 'Search',
         noResults: 'No results found.',
-        required: 'This field is required.'
+        required: 'This field is required.',
+        all: 'All'
       },
       auth: {
         login: 'Login',
@@ -113,13 +149,30 @@ const resources = {
         sort: 'Sort',
         translatedBy: 'Translated By',
         reviewedBy: 'Reviewed By',
+        translator: 'Translator',
+        id: 'ID',
+        category: 'Category',
+        originalText: 'Original Text',
+        translatedText: 'Translated Text',
+        notTranslatedYet: 'Not translated yet',
+        noTranslationsFound: 'No translations found',
+        tryDifferentFilters: 'Try different filters',
         statuses: {
           pending: 'Pending',
           inProgress: 'In Progress',
           reviewRequired: 'Review Required',
           completed: 'Completed',
           approved: 'Approved'
-        }
+        },
+        backToProjects: 'Back to Projects',
+        progressStatus: 'Progress Status',
+        completed: 'Completed',
+        filters: 'Filters',
+        mainCategory: 'Main Category',
+        subCategory: 'Sub Category',
+        searchPlaceholder: 'Search...',
+        projects: 'Projects',
+        categories: 'Categories'
       },
       navigation: {
         home: 'Home',
@@ -127,7 +180,24 @@ const resources = {
         dashboard: 'Dashboard',
         profile: 'Profile',
         settings: 'Settings',
-        admin: 'Admin'
+        admin: 'Admin',
+        title: 'Pages',
+        projects: 'Projects',
+        searchPlaceholder: 'Search...',
+        projects: 'Projects',
+        categories: 'Categories'
+      },
+      pagination: {
+        showing: 'Showing',
+        to: 'to',
+        of: 'of',
+        results: 'results',
+        previous: 'Previous',
+        next: 'Next',
+        settings: 'Settings',
+        admin: 'Admin',
+        title: 'Pages',
+        projects: 'Projects'
       }
     }
   }
