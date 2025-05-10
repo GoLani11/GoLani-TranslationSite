@@ -9,7 +9,7 @@ import TranslationTable from './TranslationTable';
 import Pagination from './Pagination';
 import ProjectHeader from './ProjectHeader';
 
-const ProjectTranslationsPage = () => {
+const TranslationListPage = () => {
   const { t } = useTranslation();
   const { projectId } = useParams();
   const navigate = useNavigate();
@@ -86,10 +86,13 @@ const ProjectTranslationsPage = () => {
     
     if (foundProject) {
       setProject(foundProject);
-    } else {
+    } else if (projectId) {
       // 프로젝트를 찾을 수 없으면 메인 번역 페이지로 리다이렉트
       toast.error('프로젝트를 찾을 수 없습니다.');
       navigate('/translations');
+    } else {
+      // 프로젝트 ID가 없는 경우(메인 번역 목록 페이지) 모든 프로젝트 목록을 보여줄 수 있음
+      // 여기서는 간단한 구현을 위해 빈 상태로 둠
     }
   };
   
@@ -98,8 +101,12 @@ const ProjectTranslationsPage = () => {
     setIsLoading(true);
     
     try {
-      // 실제 구현에서는 API에서 번역 데이터를 가져와야 합니다
-      // 현재는 목업 데이터를 사용합니다
+      // 프로젝트가 없는 경우 (메인 번역 목록 페이지)
+      if (!project && !projectId) {
+        // 모든 프로젝트의 번역 항목을 보여줄 수 있는 구현을 추가할 수 있음
+        setIsLoading(false);
+        return;
+      }
       
       // 지연 시간 시뮬레이션
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -135,18 +142,15 @@ const ProjectTranslationsPage = () => {
       
       // 필터링 - 현재 state의 최신 값을 사용하기 위해 즉시 참조
       const currentFilters = filters;
-      console.log('필터 적용 중:', currentFilters);
       
       let filtered = [...mockTranslations];
       
       if (currentFilters.mainCategory) {
         filtered = filtered.filter(item => item.main_category === currentFilters.mainCategory);
-        console.log(`메인 카테고리 필터링: ${currentFilters.mainCategory}, 결과 수: ${filtered.length}`);
       }
       
       if (currentFilters.subCategory) {
         filtered = filtered.filter(item => item.sub_category === currentFilters.subCategory);
-        console.log(`서브 카테고리 필터링: ${currentFilters.subCategory}, 결과 수: ${filtered.length}`);
       }
       
       if (currentFilters.status) {
@@ -194,7 +198,6 @@ const ProjectTranslationsPage = () => {
       ...prev,
       page: 1,
     }));
-    // loadTranslations 직접 호출하지 않음
   };
   
   const handleSearch = (e) => {
@@ -206,7 +209,6 @@ const ProjectTranslationsPage = () => {
   
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    // loadTranslations 직접 호출하지 않음
   };
   
   const handlePageChange = (newPage) => {
@@ -214,6 +216,11 @@ const ProjectTranslationsPage = () => {
       ...prev,
       page: newPage,
     }));
+  };
+  
+  // 번역 항목 클릭 시 에디터 페이지로 이동
+  const handleTranslationClick = (translationId) => {
+    navigate(`/translation-editor/${projectId}/${translationId}`);
   };
   
   // 초기 데이터 로드
@@ -230,20 +237,36 @@ const ProjectTranslationsPage = () => {
   
   return (
     <div className="container mx-auto px-4 py-8">
-      <ProjectHeader project={project} />
+      <div className="mb-6 flex justify-between items-center">
+        <h1 className="text-3xl font-bold">번역 항목 목록</h1>
+        {project && (
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500"
+          >
+            대시보드로 돌아가기
+          </button>
+        )}
+      </div>
       
-      <FilterSection 
-        project={project}
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        onSearch={handleSearch}
-        handleSearchSubmit={handleSearchSubmit}
-      />
+      {project && <ProjectHeader project={project} />}
+      
+      {project && (
+        <FilterSection 
+          project={project}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onSearch={handleSearch}
+          handleSearchSubmit={handleSearchSubmit}
+          projectId={projectId}
+        />
+      )}
       
       <TranslationTable 
         translations={translations}
         projectId={projectId}
         isLoading={isLoading}
+        onTranslationClick={handleTranslationClick}
       />
       
       <div className="mt-6">
@@ -256,4 +279,4 @@ const ProjectTranslationsPage = () => {
   );
 };
 
-export default ProjectTranslationsPage; 
+export default TranslationListPage; 

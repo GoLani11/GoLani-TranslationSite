@@ -1,13 +1,16 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const FilterSection = ({ 
   project, 
   filters, 
   onFilterChange, 
   onSearch, 
-  handleSearchSubmit
+  handleSearchSubmit,
+  projectId
 }) => {
   const { t } = useTranslation(['translation', 'common']);
+  const navigate = useNavigate();
 
   // 현재 선택된 메인 카테고리에 따른 서브 카테고리 목록 가져오기
   const getSubCategories = () => {
@@ -49,9 +52,40 @@ const FilterSection = ({
   // 서브 카테고리 선택 핸들러
   const handleSubCategoryClick = (subCategory) => {
     const newValue = filters.subCategory === subCategory ? '' : subCategory;
-    onFilterChange({
-      target: { name: 'subCategory', value: newValue }
-    });
+    onFilterChange({ target: { name: 'subCategory', value: newValue } });
+  };
+
+  // 카테고리에서 바로 작업 시작하기 버튼 핸들러
+  const handleStartTranslatingCategory = (e, categoryId) => {
+    e.stopPropagation(); // 부모 요소의 클릭 이벤트 방지
+
+    // 선택된 카테고리 정보 가져오기
+    const selectedCategory = project.mainCategories.find(cat => cat.id === categoryId);
+
+    if (selectedCategory) {
+      // 카테고리 정보와 하위 카테고리 목록을 쿼리 파라미터로 전달
+      const subCategoriesQuery = selectedCategory.subCategories.map(sub => encodeURIComponent(sub)).join(',');
+      navigate(`/translation-editor/${projectId}/new?mainCategory=${categoryId}&mainCategoryName=${encodeURIComponent(selectedCategory.name)}&subCategories=${subCategoriesQuery}`);
+    } else {
+      // 카테고리를 찾지 못한 경우 기본 에디터 페이지로 이동
+      navigate(`/translation-editor/${projectId}/new`);
+    }
+  };
+
+  // 카테고리에서 바로 작업 시작하기 버튼 핸들러 (서브 카테고리용)
+  const handleStartTranslatingSubCategory = (e, subCategory) => {
+    e.stopPropagation(); // 부모 요소의 클릭 이벤트 방지
+    const mainCategory = filters.mainCategory;
+    const selectedCategory = project.mainCategories.find(cat => cat.id === mainCategory);
+    
+    if (selectedCategory) {
+       const mainCategoryName = selectedCategory.name;
+       const subCategoriesQuery = selectedCategory.subCategories.map(sub => encodeURIComponent(sub)).join(',');
+       navigate(`/translation-editor/${projectId}/new?mainCategory=${mainCategory}&mainCategoryName=${encodeURIComponent(mainCategoryName)}&subCategory=${encodeURIComponent(subCategory)}&subCategories=${subCategoriesQuery}`);
+    } else {
+       // 메인 카테고리를 찾지 못한 경우 기본 에디터 페이지로 이동
+       navigate(`/translation-editor/${projectId}/new`);
+    }
   };
 
   return (
@@ -86,10 +120,20 @@ const FilterSection = ({
               }`}
               onClick={() => handleMainCategoryClick(category.id)}
             >
-              <h3 className="font-medium text-lg">{category.name}</h3>
-              <p className="text-sm text-gray-500 mt-1">
-                {category.subCategories.length}개 하위 카테고리
-              </p>
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-medium text-lg">{category.name}</h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {category.subCategories.length}개 하위 카테고리
+                  </p>
+                </div>
+                <button
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-2 py-1 rounded transition-colors"
+                  onClick={(e) => handleStartTranslatingCategory(e, category.id)}
+                >
+                  번역 시작
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -103,17 +147,18 @@ const FilterSection = ({
           </h3>
           <div className="flex flex-wrap gap-2">
             {getSubCategories().map((subCategory) => (
-              <button
-                key={subCategory}
-                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                  filters.subCategory === subCategory
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                }`}
-                onClick={() => handleSubCategoryClick(subCategory)}
-              >
-                {subCategory}
-              </button>
+              <div key={subCategory} className="relative inline-block">
+                <button
+                  className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                    filters.subCategory === subCategory
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                  onClick={() => handleSubCategoryClick(subCategory)}
+                >
+                  {subCategory}
+                </button>
+              </div>
             ))}
           </div>
         </div>

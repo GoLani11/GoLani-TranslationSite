@@ -98,7 +98,10 @@ const TranslationTable = ({ translations, projectId, isLoading }) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {translations.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-50">
+              <tr 
+                key={item.id} 
+                className="hover:bg-gray-50"
+              >
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {item.id}
                 </td>
@@ -127,7 +130,7 @@ const TranslationTable = ({ translations, projectId, isLoading }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <Link
-                    to={`/translations/${projectId}/edit/${item.id}`}
+                    to={`/translation-editor/${projectId}/${item.id}`}
                     className="text-indigo-600 hover:text-indigo-900"
                   >
                     {t('common.edit')}
